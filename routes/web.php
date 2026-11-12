@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -14,10 +15,17 @@ Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-// Halaman sementara admin (akan diganti di Tahap 7)
-Route::get('/admin/dashboard', function () {
-    return 'Halo Admin, ' . session('user.username');
-})->middleware('role:admin');
+Route::middleware('role:admin')->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+
+    Route::get('/menu/create', [AdminController::class, 'createMenu']);
+    Route::post('/menu', [AdminController::class, 'storeMenu']);
+    Route::get('/menu/{menu}/edit', [AdminController::class, 'editMenu']);
+    Route::put('/menu/{menu}', [AdminController::class, 'updateMenu']);
+    Route::delete('/menu/{menu}', [AdminController::class, 'destroyMenu']);
+
+    Route::put('/pesanan/{pesanan}/status', [AdminController::class, 'updateStatus']);
+});
 
 Route::middleware('role:siswa')->prefix('siswa')->group(function () {
     Route::get('/dashboard', [SiswaController::class, 'dashboard']);
