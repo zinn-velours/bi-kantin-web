@@ -19,6 +19,9 @@
         @if(session('error'))
             <div class="error">{{ session('error') }}</div>
         @endif
+                @if(session('success'))
+            <div style="background:#d4edda; padding:8px; border-radius:4px; margin-bottom:12px;">{{ session('success') }}</div>
+        @endif
 
         <form method="POST" action="/login">
             @csrf
@@ -30,6 +33,7 @@
 
             <button type="submit">Masuk</button>
         </form>
+                <p>Belum punya akun? <a href="/register">Daftar di sini</a></p>
     </div>
 </body>
 </html>

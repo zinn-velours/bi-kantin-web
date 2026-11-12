@@ -38,7 +38,27 @@ class AuthController extends Controller
         }
         return redirect('/siswa/dashboard');
     }
+    
+    public function showRegister()
+    {
+        return view('register');
+    }
 
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'username' => 'required|max:50|unique:users,username',
+            'password' => 'required|min:3|confirmed',
+        ]);
+
+        User::create([
+            'username' => $data['username'],
+            'password' => $data['password'],
+            'role'     => 'siswa',
+        ]);
+
+        return redirect('/login')->with('success', 'Registrasi berhasil, silakan login.');
+    }
     public function logout()
     {
         session()->forget('user');
