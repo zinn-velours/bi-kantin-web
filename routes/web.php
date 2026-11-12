@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\KasirController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -36,4 +37,10 @@ Route::middleware('role:admin')->prefix('admin')->group(function () {
 Route::middleware('role:siswa')->prefix('siswa')->group(function () {
     Route::get('/dashboard', [SiswaController::class, 'dashboard']);
     Route::post('/checkout', [SiswaController::class, 'checkout']);
+});
+
+Route::middleware('role:kasir,admin')->prefix('kasir')->group(function () {
+    Route::get('/dashboard', [KasirController::class, 'dashboard']);
+    Route::put('/pesanan/{pesanan}/lunas', [KasirController::class, 'lunas']);
+    Route::put('/pesanan/{pesanan}/siap', [KasirController::class, 'siapDiambil']);
 });

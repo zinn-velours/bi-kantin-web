@@ -24,11 +24,16 @@
 </head>
 <body>
     <nav>
-                <div>
+                      <div>
             <strong>Bi-Kantin</strong>&nbsp;&nbsp;
             @if(session('user.role') === 'admin')
                 <a href="/admin/dashboard">Dashboard</a>
                 <a href="/admin/users">Akun</a>
+                <a href="/kasir/dashboard">Kasir</a>
+            @elseif(session('user.role') === 'kasir')
+                <a href="/kasir/dashboard">Pembayaran</a>
+            @elseif(session('user.role') === 'siswa')
+                <a href="/siswa/dashboard">Menu &amp; Pesanan</a>
             @endif
         </div>
         @if(session('user'))

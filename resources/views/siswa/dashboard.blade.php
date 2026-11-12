@@ -31,17 +31,18 @@
 <div class="card">
     <h3>Riwayat &amp; Status Pesanan</h3>
     <table>
-        <tr><th>#</th><th>Menu</th><th>Jumlah</th><th>Total</th><th>Status</th></tr>
+    <tr><th>#</th><th>Menu</th><th>Jumlah</th><th>Total</th><th>Pembayaran</th><th>Status</th></tr>
         @forelse($pesanan as $p)
         <tr>
             <td>{{ $p->id }}</td>
             <td>{{ $p->menu->nama_menu ?? '(menu dihapus)' }}</td>
             <td>{{ $p->jumlah }}</td>
             <td>Rp {{ number_format($p->total_harga, 0, ',', '.') }}</td>
+           <td>{{ $p->status_bayar }}</td>
             <td><strong>{{ $p->status }}</strong></td>
         </tr>
         @empty
-        <tr><td colspan="5">Belum ada pesanan.</td></tr>
+        <tr><td colspan="6">Belum ada pesanan.</td></tr>
         @endforelse
     </table>
 </div>
