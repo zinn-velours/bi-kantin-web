@@ -25,6 +25,12 @@ Route::middleware('role:admin')->prefix('admin')->group(function () {
     Route::delete('/menu/{menu}', [AdminController::class, 'destroyMenu']);
 
     Route::put('/pesanan/{pesanan}/status', [AdminController::class, 'updateStatus']);
+        Route::get('/users', [AdminController::class, 'users']);
+    Route::get('/users/create', [AdminController::class, 'createUser']);
+    Route::post('/users', [AdminController::class, 'storeUser']);
+    Route::get('/users/{user}/edit', [AdminController::class, 'editUser']);
+    Route::put('/users/{user}', [AdminController::class, 'updateUser']);
+    Route::delete('/users/{user}', [AdminController::class, 'destroyUser']);
 });
 
 Route::middleware('role:siswa')->prefix('siswa')->group(function () {

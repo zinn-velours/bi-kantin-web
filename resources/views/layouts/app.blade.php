@@ -24,7 +24,13 @@
 </head>
 <body>
     <nav>
-        <div><strong>Bi-Kantin</strong></div>
+                <div>
+            <strong>Bi-Kantin</strong>&nbsp;&nbsp;
+            @if(session('user.role') === 'admin')
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/users">Akun</a>
+            @endif
+        </div>
         @if(session('user'))
             <form method="POST" action="/logout">
                 @csrf

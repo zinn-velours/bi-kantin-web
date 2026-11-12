@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -12,19 +13,21 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function login(Request $request)
+        public function login(Request $request)
     {
         $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
 
-        $user = User::where('username', $request->username)
-                    ->where('password', $request->password)
-                    ->first();
+        $user = User::where('username', $request->username)->first();
 
-        if (!$user) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return back()->with('error', 'Username atau password salah.');
+        }
+
+        if ($user->status !== 'aktif') {
+            return back()->with('error', 'Akun Anda non-aktif. Hubungi admin.');
         }
 
         session(['user' => [
@@ -33,12 +36,13 @@ class AuthController extends Controller
             'role'     => $user->role,
         ]]);
 
-        if ($user->role === 'admin') {
-            return redirect('/admin/dashboard');
-        }
-        return redirect('/siswa/dashboard');
+        return match ($user->role) {
+            'admin' => redirect('/admin/dashboard'),
+            'kasir' => redirect('/kasir/dashboard'),
+            default => redirect('/siswa/dashboard'),
+        };
     }
-    
+
     public function showRegister()
     {
         return view('register');
@@ -53,7 +57,7 @@ class AuthController extends Controller
 
         User::create([
             'username' => $data['username'],
-            'password' => $data['password'],
+            'password' => Hash::make($data['password']),
             'role'     => 'siswa',
         ]);
 
